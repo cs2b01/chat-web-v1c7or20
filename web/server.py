@@ -2,6 +2,8 @@ from flask import Flask,render_template, request, session, Response, redirect
 from database import connector
 from model import entities
 import json
+from datetime import datetime, date, time, timedelta
+import calendar
 
 db = connector.Manager()
 engine = db.createEngine()
@@ -27,6 +29,16 @@ def get_users():
     return Response(json.dumps(data, cls=connector.AlchemyEncoder), mimetype='application/json')
 
 
+@app.route('/messages', methods = ['GET'])
+def get_messages():
+    session = db.getSession(engine)
+    dbResponse = session.query(entities.Message)
+    data = []
+    for message in dbResponse:
+        data.append(message)
+    return Response(json.dumps(data, cls=connector.AlchemyEncoder), mimetype='application/json')
+
+
 @app.route('/users', methods = ['POST'])
 def create_user():
     c =  json.loads(request.form['values'])
@@ -41,6 +53,18 @@ def create_user():
     session.commit()
     return 'Created User'
 
+@app.route('/messages', methods = ['POST'])
+def create_messages():
+    c =  json.loads(request.form['values'])
+    message = entities.Message(
+        content=c['content'],
+        user_from_id=c['user_from_id'],
+        user_to_id=c['user_to_id'],
+    )
+    session = db.getSession(engine)
+    session.add(message)
+    session.commit()
+    return 'Created Messages'
 
 @app.route('/users', methods = ['PUT'])
 def update_user():
@@ -55,11 +79,35 @@ def update_user():
     return 'Updated User'
 
 
+@app.route('/messages', methods = ['PUT'])
+def update_message():
+    session = db.getSession(engine)
+    id = request.form['key']
+    message = session.query(entities.Message).filter(entities.Message.id == id).first()
+    c =  json.loads(request.form['values'])
+    for key in c.keys():
+        setattr(message, key, c[key])
+    session.add(message)
+    session.commit()
+    return 'Updated Message'
+
+
 @app.route('/users', methods = ['DELETE'])
+def delete_user():
+    id = request.form['key']
+    session = db.getSession(engine)
+    users = session.query(entities.User).filter(entities.User.id == id)
+    for user in users:
+        session.delete(user)
+    session.commit()
+    return "Deleted User"
+
+
+@app.route('/messages', methods = ['DELETE'])
 def delete_message():
     id = request.form['key']
     session = db.getSession(engine)
-    messages = session.query(entities.User).filter(entities.User.id == id)
+    messages = session.query(entities.Message).filter(entities.Message.id == id)
     for message in messages:
         session.delete(message)
     session.commit()
@@ -69,7 +117,7 @@ def delete_message():
 @app.route('/users/<id>', methods = ['GET'])
 def get_user(id):
     db_session = db.getSession(engine)
-    users = db_session.query(entities.User).filter(entities.User.id == id)
+    users = db_session.query(entities.Message).filter(entities.Message.id == id)
     for user in users:
         js = json.dumps(user, cls=connector.AlchemyEncoder)
         return  Response(js, status=200, mimetype='application/json')
@@ -77,6 +125,14 @@ def get_user(id):
     message = { 'status': 404, 'message': 'Not Found'}
     return Response(message, status=404, mimetype='application/json')
 
+
+@app.route('/messages/<id>', methods = ['GET'])
+def get_message(id):
+    db_session = db.getSession(engine)
+    messages = db_session.query(entities.Message).filter(entities.Message.id == id)
+    for message in messages:
+        js = json.dumps(message, cls=connector.AlchemyEncoder)
+        return  Response(js, status=200, mimetype='application/json')
 
 
 if __name__ == '__main__':
