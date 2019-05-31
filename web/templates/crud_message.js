@@ -39,13 +39,31 @@ $(function(){
             dataField: "sent_on",
             allowEditing: false
         }, {
-            dataField: "user_from_id"
-        }, {
-            dataField: "user_to_id"
-        }, {
-            dataField: "user_from"
-        }, {
-            dataField: "user_to"
+            dataField: "user_from.username",
+            caption: "User from",
+            lookup: {
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: "id",
+                        loadUrl: "http://127.0.0.1:8080/users",
+                        onBeforeSend: function(method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true };
+                        }
+                    }),
+                    displayExpr: "id"
+                }
+      }, {
+            dataField: "user_to.username",
+            caption: "User to",
+            lookup: {
+                    dataSource: DevExpress.data.AspNet.createStore({
+                        key: "id",
+                        loadUrl: "http://127.0.0.1:8080/users",
+                        onBeforeSend: function(method, ajaxOptions) {
+                            ajaxOptions.xhrFields = { withCredentials: true };
+                        }
+                    }),
+                    displayExpr: "id"
+                }
         }, ],
     }).dxDataGrid("instance");
 });

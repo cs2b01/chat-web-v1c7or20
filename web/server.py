@@ -2,8 +2,7 @@ from flask import Flask,render_template, request, session, Response, redirect
 from database import connector
 from model import entities
 import json
-from datetime import datetime, date, time, timedelta
-import calendar
+from datetime import datetime
 
 db = connector.Manager()
 engine = db.createEngine()
@@ -14,7 +13,7 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/static/<content>')
+@app.route('/static/<content>', methods=['GET','POST','PUT','DELETE'])
 def static_content(content):
     return render_template(content)
 
@@ -58,8 +57,8 @@ def create_messages():
     c =  json.loads(request.form['values'])
     message = entities.Message(
         content=c['content'],
-        user_from_id=c['user_from_id'],
-        user_to_id=c['user_to_id'],
+        user_from_id=c['user_from']['username']['id'],
+        user_to_id=c['user_to']['username']['id']
     )
     session = db.getSession(engine)
     session.add(message)
@@ -96,9 +95,8 @@ def update_message():
 def delete_user():
     id = request.form['key']
     session = db.getSession(engine)
-    users = session.query(entities.User).filter(entities.User.id == id)
-    for user in users:
-        session.delete(user)
+    users = session.query(entities.User).filter(entities.User.id == id).one()
+    session.delete(user)
     session.commit()
     return "Deleted User"
 
@@ -117,7 +115,7 @@ def delete_message():
 @app.route('/users/<id>', methods = ['GET'])
 def get_user(id):
     db_session = db.getSession(engine)
-    users = db_session.query(entities.Message).filter(entities.Message.id == id)
+    users = db_session.query(entities.User).filter(entities.User.id == id)
     for user in users:
         js = json.dumps(user, cls=connector.AlchemyEncoder)
         return  Response(js, status=200, mimetype='application/json')
@@ -137,4 +135,4 @@ def get_message(id):
 
 if __name__ == '__main__':
     app.secret_key = ".."
-    app.run(debug=True, port=8080, threaded=True, host=('127.0.0.1'))
+    app.run( port=8080, threaded=True, host=('127.0.0.1'))

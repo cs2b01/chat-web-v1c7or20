@@ -1,8 +1,7 @@
 from sqlalchemy import Column, Integer, String, Sequence, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from database import connector
-from datetime import datetime, date, time, timedelta
-import calendar
+from datetime import datetime
 
 class User(connector.Manager.Base):
     __tablename__ = 'users'
