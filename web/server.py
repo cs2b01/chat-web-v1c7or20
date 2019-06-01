@@ -133,6 +133,23 @@ def get_message(id):
         return  Response(js, status=200, mimetype='application/json')
 
 
+@app.route('/authenticate', methods =["POST"])
+def authenticate():
+    #1. Get data from request
+    username = request.form['username']
+    password = request.form['password']
+    #2. Look in database
+    db_session = db.getSession(engine)
+    try:
+        user = db_session.query(entities.User
+            ).filter(entities.User.username == username
+            ).filter(entities.User.password == password
+            ).one()
+        return render_template("success.html")
+    except Exception:
+        return render_template("fail.html")
+
+
 if __name__ == '__main__':
     app.secret_key = ".."
-    app.run( port=8080, threaded=True, host=('127.0.0.1'))
+    app.run(debug=True, port=8080, threaded=True, host=('127.0.0.1'))
