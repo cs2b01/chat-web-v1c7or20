@@ -96,7 +96,7 @@ def delete_user():
     id = request.form['key']
     session = db.getSession(engine)
     users = session.query(entities.User).filter(entities.User.id == id).one()
-    session.delete(user)
+    session.delete(users)
     session.commit()
     return "Deleted User"
 

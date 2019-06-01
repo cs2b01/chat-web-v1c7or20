@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DataExportManager">
@@ -25,13 +25,13 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="ea497810-2884-46c3-9212-15986728c85b">
-        <schema name="main" object-types="view, column, table" />
+        <schema name="main" object-types="table, column, view" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="ea497810-2884-46c3-9212-15986728c85b">
-      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[SELECT * FROM messages;
+      <console name="Connection" type="STANDARD" schema="main" session="Main">SELECT * FROM messages;
 
 INSERT INTO messages VALUES( 1,'wqdadasawa',10/10/18,3,2);
 
@@ -47,7 +47,7 @@ create table messages(
     user_from_id INTEGER NOT NULL ,
     user_to_id INTEGER NOT NULL ,
     userfrom TEXT NOT NULL UNIQUE,
-    user_to TEXT NOT  NULL )]]></console>
+    user_to TEXT NOT  NULL )</console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">

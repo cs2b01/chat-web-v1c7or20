@@ -49,7 +49,7 @@ $(function(){
                             ajaxOptions.xhrFields = { withCredentials: true };
                         }
                     }),
-                    displayExpr: "id"
+                    displayExpr: "username"
                 }
       }, {
             dataField: "user_to.username",
@@ -62,7 +62,7 @@ $(function(){
                             ajaxOptions.xhrFields = { withCredentials: true };
                         }
                     }),
-                    displayExpr: "id"
+                    displayExpr: "username"
                 }
         }, ],
     }).dxDataGrid("instance");
