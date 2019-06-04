@@ -136,8 +136,9 @@ def get_message(id):
 @app.route('/authenticate', methods =["POST"])
 def authenticate():
     #1. Get data from request
-    username = request.form['username']
-    password = request.form['password']
+    message = json.loads(request.data)
+    username = message['username']
+    password = message['password']
     #2. Look in database
     db_session = db.getSession(engine)
     try:
@@ -145,9 +146,11 @@ def authenticate():
             ).filter(entities.User.username == username
             ).filter(entities.User.password == password
             ).one()
-        return render_template("success.html")
+        message = {'message': 'Authorized'}
+        return Response(message, status=200, mimetype='application/json')
     except Exception:
-        return render_template("fail.html")
+        message={'message': 'Unauthorized'}
+        return Response(message, status=401, mimetype='application/json')
 
 
 if __name__ == '__main__':

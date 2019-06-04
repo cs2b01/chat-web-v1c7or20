@@ -28,31 +28,40 @@
         </tr>
         <tr>
           <td colspan="2">
-            <input type="submit" value="Login" onclick="getdata()" />
+            <input type="button" value="Login" onclick="getdata()" />
           </td>
         </tr>
       </table>
+      <label id="action"> Waiting for user</label>
     </div>
   </form>
   <script >
     function getdata(){
-      var uname = $('#username').val();
-      var paswd = $('#password').val();
+      $('#action').html("Authenticating...");
+      var username = $('#username').val();
+      var password = $('#password').val();
+      var message= JSON.stringify({
+        "username": username,
+        "password":password
+      });
+
       $.ajax({
         url:'/authenticate',
         type:'POST',
-        contentType: 'aplication/json',
-        data= JSON.stringify({
-          "username": uname,
-          "password": paswd
-        }),
-        dataType:'json'
+        contentType: 'application/json',
+        data: message,
+        dataType:'json',
+        success: function(response){
+          //alert(JSON.stringify(responser));
+          $('#action').html(response['statusText']);
+        },
+        error: function(response){
+          //alert(JSON.stringify(responser));
+          $('#action').html(response['statusText']);
+        }
       });
-      alert(JSON.stringify({
-        "username": uname,
-        "password": paswd
-      }))
     }
+
   </script>
 </body>
 </html>
