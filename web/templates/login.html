@@ -1,67 +1,33 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
-    <title>Chat - Login</title>
+    <meta charset="UTF-8">
+    <title>Chat Login</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery-3.1.0.min.js"%3E%3C/script%3E'))</script>
-
+    <script src="login.js"></script>
 </head>
 <body>
-  <form method="POST" action="/authenticate">
+
+    <table>
+        <tr>
+            <td>Username</td>
+            <td><input type="text" name="username" id="username"/></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" name="password" id="password" /></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" value="login" onclick="getData()"/>
+            </td>
+        </tr>
+    </table>
     <div>
-      <table>
-        <tr>
-          <td>
-            Username
-          </td>
-          <td>
-            <input type="text" name="username" id ="username"/>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Password
-          </td>
-          <td>
-            <input type="password" name="password" id = "password">
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <input type="button" value="Login" onclick="getdata()" />
-          </td>
-        </tr>
-      </table>
-      <label id="action"> Waiting for user</label>
+        <img id ="giphy" src="/static/images/giphy.gif" style="display:none">
+        <img id ="indice" src="/static/images/indice.jpg" style="display:none">
+        <img id ="indice1" src="/static/images/indice1.jpg" style="display:none">
+
     </div>
-  </form>
-  <script >
-    function getdata(){
-      $('#action').html("Authenticating...");
-      var username = $('#username').val();
-      var password = $('#password').val();
-      var message= JSON.stringify({
-        "username": username,
-        "password":password
-      });
-
-      $.ajax({
-        url:'/authenticate',
-        type:'POST',
-        contentType: 'application/json',
-        data: message,
-        dataType:'json',
-        success: function(response){
-          //alert(JSON.stringify(responser));
-          $('#action').html(response['statusText']);
-        },
-        error: function(response){
-          //alert(JSON.stringify(responser));
-          $('#action').html(response['statusText']);
-        }
-      });
-    }
-
-  </script>
 </body>
 </html>
