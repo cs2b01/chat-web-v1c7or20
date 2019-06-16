@@ -27,6 +27,7 @@ function getData(){
                 }else{
                     $('#giphy').hide();
                     $('#indice').show();
+                    location.href= "/static/chat.html"
                 }
             }
         });

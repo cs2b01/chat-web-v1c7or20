@@ -173,7 +173,7 @@ def logout():
 
 
 @app.route('/messages/<user_from_id>/<user_to_id>', methods = ['GET'])
-def get_messages(user_from_id, user_to_id ):
+def get_messages2(user_from_id, user_to_id ):
     db_session = db.getSession(engine)
     messages1 = db_session.query(entities.Message).filter(
         entities.Message.user_from_id == user_from_id).filter(
