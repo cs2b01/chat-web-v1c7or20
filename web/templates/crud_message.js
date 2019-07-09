@@ -1,5 +1,5 @@
 $(function(){
-    var url = "http://127.0.0.1:8080/messages";
+    var url = "http://127.0.0.1:5000/messages";
 
 
     $("#grid").dxDataGrid({
@@ -44,7 +44,7 @@ $(function(){
             lookup: {
                     dataSource: DevExpress.data.AspNet.createStore({
                         key: "id",
-                        loadUrl: "http://127.0.0.1:8080/users",
+                        loadUrl: "http://127.0.0.1:5000/users",
                         onBeforeSend: function(method, ajaxOptions) {
                             ajaxOptions.xhrFields = { withCredentials: true };
                         }
@@ -57,7 +57,7 @@ $(function(){
             lookup: {
                     dataSource: DevExpress.data.AspNet.createStore({
                         key: "id",
-                        loadUrl: "http://127.0.0.1:8080/users",
+                        loadUrl: "http://127.0.0.1:5000/users",
                         onBeforeSend: function(method, ajaxOptions) {
                             ajaxOptions.xhrFields = { withCredentials: true };
                         }
